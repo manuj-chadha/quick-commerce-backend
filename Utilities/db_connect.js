@@ -6,7 +6,7 @@ async function dbConnect(){
 
        console.log("MongoDb Connected 🎉")
   } catch (error) {
-      console.log("error in connecting db-->",error.messaage);
+      console.log("error in connecting db-->",error);
       process.exit(1)
 
   }

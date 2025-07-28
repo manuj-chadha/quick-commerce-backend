@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema({
       ref:'Product'
     }]
 }, {
-    timestamps: TextTrackCue
+    timestamps: true 
 });
 
 module.exports = mongoose.model('User', userSchema);

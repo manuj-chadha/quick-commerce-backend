@@ -13,7 +13,7 @@ const cartRoutes = require('./Routes/cart.routes');
 const app=express()
 
 const corsConfiguration={
-  origin:"http://localhost:5173",
+  origin: ["http://localhost:5173", "https://quickkart-project.vercel.app"],
    credentials: true,
 }
 

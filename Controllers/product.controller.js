@@ -1,5 +1,5 @@
 const Product = require('../Models/product.model');
-
+const Category = require('../Models/category.model'); 
 // Add a new product (Admin only)
 exports.addProduct = async (req, res) => {
     try {
@@ -28,7 +28,7 @@ exports.addProduct = async (req, res) => {
 // Get all products
 exports.getProducts = async (req, res) => {
     try {
-        const products = await Product.find({ isActive: true }).populate('category');
+        const products = await Product.find({ isActive: true }).populate('category');;
         res.status(200).json(products);
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });

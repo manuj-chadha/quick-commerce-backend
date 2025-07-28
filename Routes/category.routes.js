@@ -3,6 +3,8 @@ const { addCategory, getCategories, updateCategory, deleteCategory } = require('
 const { protect, admin } = require('../Middlewares/auth.middleware');
 const upload = require('../Utilities/cloudinary');
 const router = express.Router();
+const categoryController = require('../controllers/category.controller');
+
 
 // Public route to get all categories
 router.route('/').get(getCategories);

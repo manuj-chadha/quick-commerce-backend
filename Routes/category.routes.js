@@ -9,6 +9,7 @@ router.route('/').get(getCategories);
 
 // Admin routes
 router.route('/').post(protect, admin, upload.single('iconBanner'), addCategory);
+router.get('/:id', categoryController.getCategoryById);
 router.route('/:id').put(protect, admin, upload.single('iconBanner'), updateCategory).delete(protect, admin, deleteCategory);
 
 module.exports = router;

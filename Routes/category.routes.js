@@ -1,17 +1,15 @@
 const express = require('express');
-const { addCategory, getCategories, updateCategory, deleteCategory } = require('../Controllers/category.controller');
+const { addCategory, getCategories, updateCategory, deleteCategory, getCategoryById } = require('../Controllers/category.controller');
 const { protect, admin } = require('../Middlewares/auth.middleware');
 const upload = require('../Utilities/cloudinary');
 const router = express.Router();
-const categoryController = require('../controllers/category.controller');
-
 
 // Public route to get all categories
 router.route('/').get(getCategories);
 
 // Admin routes
 router.route('/').post(protect, admin, upload.single('iconBanner'), addCategory);
-router.get('/:id', categoryController.getCategoryById);
+router.get('/:id', getCategoryById);
 router.route('/:id').put(protect, admin, upload.single('iconBanner'), updateCategory).delete(protect, admin, deleteCategory);
 
 module.exports = router;

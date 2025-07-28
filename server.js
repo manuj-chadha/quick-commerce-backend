@@ -8,6 +8,7 @@ const cors = require('cors')
 const authRoutes = require('./Routes/auth.routes');
 const productRoutes = require('./Routes/product.routes');
 const cartRoutes = require('./Routes/cart.routes');
+const categoryRoutes = require('./Routes/category.routes');
 
 
 const app=express()
@@ -30,7 +31,7 @@ app.use(cookieParser()) //for cookies
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
-
+app.use('/api/categories', categoryRoutes);
 
 const PORT=process.env.PORT || 8080
 //listening server

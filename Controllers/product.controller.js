@@ -50,13 +50,40 @@ exports.getProductById = async (req, res) => {
 
 // Update a product (Admin only)
 exports.updateProduct = async (req, res) => {
-    try {
-        const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.status(200).json({ message: 'Product updated successfully', product: updatedProduct });
-    } catch (error) {
-        res.status(500).json({ message: 'Server error', error });
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: 'Product not found' });
+
+    // Update basic fields
+    product.name = req.body.name || product.name;
+    product.description = req.body.description || product.description;
+    product.category = req.body.category || product.category;
+    product.subcategory = req.body.subcategory || product.subcategory;
+    product.priceMRP = req.body.priceMRP || product.priceMRP;
+    product.discountPrice = req.body.discountPrice || product.discountPrice;
+    product.stockCount = req.body.stockCount || product.stockCount;
+
+    // Update nested weightUnit
+    if (req.body['weightUnit[value]'] && req.body['weightUnit[unit]']) {
+      product.weightUnit = {
+        value: req.body['weightUnit[value]'],
+        unit: req.body['weightUnit[unit]']
+      };
     }
+
+    // Handle image uploads — append, don't replace
+    if (req.files && req.files.length > 0) {
+      const newImages = req.files.map(file => file.path);
+      product.images = [...product.images, ...newImages];
+    }
+
+    const updatedProduct = await product.save();
+    res.status(200).json({ message: 'Product updated successfully', product: updatedProduct });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
 };
+
 
 // Delete a product (Admin only)
 exports.deleteProduct = async (req, res) => {

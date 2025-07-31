@@ -3,8 +3,18 @@ const Category = require('../Models/category.model');
 // Add a new product (Admin only)
 exports.addProduct = async (req, res) => {
     try {
-        const { name, description, category, subcategory, priceMRP, discountPrice, weightUnit, stockCount } = req.body;
+        const { name, description, category, subcategory, priceMRP, discountPrice, weightValue, weightUnit, stockCount } = req.body;
         const images = req.files.map(file => file.path);
+
+        // Build nested object only if weight values are provided
+        const weightUnitObj =
+          weightValue && weightUnit
+            ? {
+                value: parseFloat(weightValue),
+                unit: weightUnit,
+              }
+            : undefined;
+
 
         const newProduct = new Product({
             name,
@@ -14,7 +24,7 @@ exports.addProduct = async (req, res) => {
             subcategory,
             priceMRP,
             discountPrice,
-            weightUnit,
+            weightUnit: weightUnitObj,
             stockCount,
         });
 

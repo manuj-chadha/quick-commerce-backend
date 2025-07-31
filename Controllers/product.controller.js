@@ -74,10 +74,10 @@ exports.updateProduct = async (req, res) => {
     product.stockCount = req.body.stockCount || product.stockCount;
 
     // Update nested weightUnit
-    if (req.body['weightUnit[value]'] && req.body['weightUnit[unit]']) {
+    if (req.body.weightValue && req.body.weightUnit) {
       product.weightUnit = {
-        value: req.body['weightUnit[value]'],
-        unit: req.body['weightUnit[unit]']
+        value: parseFloat(req.body.weightValue),
+        unit: req.body.weightUnit
       };
     }
 

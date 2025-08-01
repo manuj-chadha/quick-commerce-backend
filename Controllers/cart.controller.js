@@ -43,7 +43,10 @@ exports.addToCart = async (req, res) => {
         cart.items.push({
           product: productId,
           quantity,
-          priceAtAddToCart: product.discountPrice || product.priceMRP,
+          priceAtAddToCart: Math.round(
+            product.priceMRP - (product.priceMRP * (product.discountPrice || 0) / 100)
+          ),
+
           name: product.name,
         });
       }

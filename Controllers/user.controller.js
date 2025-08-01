@@ -76,3 +76,16 @@ exports.signin = async (req, res) => {
         res.status(500).json({ message: 'Server error', error });
     }
 };
+
+// controllers/admin.controller.js
+exports.getAllCustomers = async (req, res) => {
+  try {
+    const customers = await User.find({ role: 'customer' })  // assuming 'user' role marks a customer
+      .select('name email createdAt'); // only fetch relevant fields
+
+    res.status(200).json(customers);
+  } catch (err) {
+    console.error('Error fetching customers:', err);
+    res.status(500).json({ error: 'Failed to fetch customers' });
+  }
+};

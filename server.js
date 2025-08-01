@@ -9,9 +9,12 @@ const authRoutes = require('./Routes/auth.routes');
 const productRoutes = require('./Routes/product.routes');
 const cartRoutes = require('./Routes/cart.routes');
 const categoryRoutes = require('./Routes/category.routes');
+const paymentRoutes=require('./Routes/payment.routes');
+const orderRoutes = require('./routes/order.routes');
 
 
-const app=express()
+const app=express();
+app.use('/api/payment/webhook', paymentRoutes);
 
 const corsConfiguration={
   origin: ["http://localhost:5173", "https://quickkart-project.vercel.app"],
@@ -32,6 +35,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/payment', paymentRoutes);
+app.use('/api/orders', orderRoutes);
 
 const PORT=process.env.PORT || 8080
 //listening server

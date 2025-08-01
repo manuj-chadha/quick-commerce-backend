@@ -1,5 +1,5 @@
 const express = require('express');
-const { signup, signin, getAllUsers } = require('../Controllers/user.controller');
+const { signup, signin, getAllCustomers } = require('../Controllers/user.controller');
 const { protect, admin } = require('../Middlewares/auth.middleware');
 
 const router = express.Router();
@@ -9,6 +9,7 @@ router.post('/signup', signup);
 router.post('/signin', signin);
 
 // Admin-only Route
-router.get('/', protect, admin, getAllUsers);
+router.get('/admin/customers', protect, admin, getAllCustomers);
+
 
 module.exports = router;

@@ -77,7 +77,10 @@ const orderSchema = new mongoose.Schema({
     invoiceUrl: { 
         type: String,
         trim: true
-    }
+    },
+    stripeSessionId: { type: String },
+    paymentStatus: { type: String, enum: ['pending', 'paid', 'failed'], default: 'pending' }
+
 }, {
     timestamps: true
 });

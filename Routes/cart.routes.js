@@ -4,7 +4,8 @@ const {
   addToCart,
   removeFromCart,
   updateCartItem,
-  clearCart
+  clearCart,
+  mergeGuestCart
 } = require('../Controllers/cart.controller');
 const { protect } = require('../Middlewares/auth.middleware');
 
@@ -15,6 +16,9 @@ router.route('/')
   .get(protect, getCart)
   .post(protect, addToCart)
   .delete(protect, clearCart);
+
+router.post('/merge', protect, mergeGuestCart);
+
 
 // Update or remove specific item
 router.route('/:productId')

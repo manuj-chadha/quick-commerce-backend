@@ -131,3 +131,47 @@ exports.clearCart = async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 };
+
+// POST /cart/merge - Merge guest cart into user cart
+exports.mergeGuestCart = async (req, res) => {
+  try {
+    const guestItems = req.body.items; // [{ productId, quantity }, ...]
+
+    if (!Array.isArray(guestItems) || guestItems.length === 0) {
+      return res.status(400).json({ message: 'Invalid guest cart items' });
+    }
+
+    let cart = await Cart.findOne({ user: req.user.id }) || new Cart({ user: req.user.id, items: [] });
+
+    for (const guestItem of guestItems) {
+      const { productId, quantity } = guestItem;
+      if (!productId || !quantity || quantity < 1) continue;
+
+      const product = await Product.findById(productId);
+      if (!product) continue;
+
+      const existingIndex = cart.items.findIndex(item => item.product.toString() === productId);
+      const priceAtAddToCart = Math.round(
+        product.priceMRP - (product.priceMRP * (product.discountPrice || 0)) / 100
+      );
+
+      if (existingIndex > -1) {
+        cart.items[existingIndex].quantity += quantity;
+      } else {
+        cart.items.push({
+          product: productId,
+          quantity,
+          priceAtAddToCart,
+          name: product.name,
+        });
+      }
+    }
+
+    await cart.save();
+    const populatedCart = await cart.populate('items.product');
+
+    res.status(200).json({ message: 'Guest cart merged', cart: populatedCart });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error during cart merge', error });
+  }
+};
